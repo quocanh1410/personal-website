@@ -32,11 +32,36 @@
 
   body{
     background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 65%, #FFB6D9 100%);
+    background-size: 100% 220%;
     position:relative;
     display:flex;
     align-items:center;
     justify-content:center;
+    animation: sky-drift 14s ease-in-out infinite;
+    transition: filter .4s ease;
   }
+
+  @keyframes sky-drift{
+    0%, 100%{ background-position: 0% 0%; }
+    50%{ background-position: 0% 100%; }
+  }
+
+  body.party{
+    animation: party-bg 2.4s linear infinite;
+  }
+  @keyframes party-bg{
+    0%{ filter: hue-rotate(0deg) saturate(1.3); }
+    100%{ filter: hue-rotate(360deg) saturate(1.3); }
+  }
+
+  @keyframes screen-shake{
+    0%, 100%{ transform: translate(0,0); }
+    20%{ transform: translate(-6px, 3px); }
+    40%{ transform: translate(6px, -3px); }
+    60%{ transform: translate(-4px, -2px); }
+    80%{ transform: translate(4px, 2px); }
+  }
+  .shake{ animation: screen-shake .35s ease; }
 
   /* soft ground blob */
   .ground{
@@ -225,12 +250,278 @@
     font-weight:600;
     letter-spacing:.5px;
   }
+
+  /* ---- Party mode button ---- */
+  .party-btn{
+    position:absolute;
+    top: 22px;
+    right: 22px;
+    z-index: 20;
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size: 14px;
+    color: var(--white);
+    background: var(--pink);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor:pointer;
+    box-shadow: 0 6px 0 rgba(75,46,111,0.3), 0 8px 16px var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease;
+    opacity:0;
+    animation: fade-up .7s ease 1.6s forwards;
+  }
+  .party-btn:hover{ transform: translateY(-2px) scale(1.05); }
+  .party-btn:active{ transform: translateY(3px); box-shadow: 0 3px 0 rgba(75,46,111,0.3), 0 4px 10px var(--shadow); }
+  .party-btn.on{ background: var(--teal); }
+
+  @media (max-width:600px){
+    .party-btn{ top:12px; right:12px; font-size:12px; padding:8px 14px; }
+  }
+
+  /* sparkle cursor trail */
+  .sparkle{
+    position:fixed;
+    top:0; left:0;
+    width: 8px; height: 8px;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:60;
+    animation: sparkle-fade .6s ease forwards;
+  }
+  @keyframes sparkle-fade{
+    0%{ opacity:1; transform: scale(1); }
+    100%{ opacity:0; transform: scale(0.2) translateY(14px); }
+  }
+
+  /* emoji rain (party mode) */
+  .emoji-drop{
+    position:fixed;
+    top:-40px;
+    font-size: 26px;
+    z-index: 40;
+    pointer-events:none;
+    animation: emoji-fall linear forwards;
+  }
+  @keyframes emoji-fall{
+    to{ transform: translateY(110vh) rotate(360deg); }
+  }
+
+  /* combo message */
+  .combo-msg{
+    position:fixed;
+    left:50%;
+    top:22%;
+    transform: translate(-50%, 0);
+    font-family:'Baloo 2', cursive;
+    font-weight:800;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--pink);
+    text-shadow: 3px 3px 0 rgba(255,255,255,0.7);
+    z-index: 55;
+    pointer-events:none;
+    animation: combo-pop 1s ease forwards;
+    white-space: nowrap;
+  }
+  @keyframes combo-pop{
+    0%{ opacity:0; transform: translate(-50%, 10px) scale(0.6); }
+    20%{ opacity:1; transform: translate(-50%, 0) scale(1.15); }
+    30%{ transform: translate(-50%, 0) scale(1); }
+    80%{ opacity:1; }
+    100%{ opacity:0; transform: translate(-50%, -30px) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body{ animation:none !important; }
+    body.party{ animation:none !important; }
+    .shake{ animation:none !important; }
+  }
+
+  /* ---- Gallery button ---- */
+  .gallery-btn{
+    position:absolute;
+    top: 22px;
+    left: 22px;
+    z-index: 20;
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size: 14px;
+    color: var(--white);
+    background: var(--lilac);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor:pointer;
+    box-shadow: 0 6px 0 rgba(75,46,111,0.3), 0 8px 16px var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease;
+    opacity:0;
+    animation: fade-up .7s ease 1.6s forwards;
+  }
+  .gallery-btn:hover{ transform: translateY(-2px) scale(1.05); }
+  .gallery-btn:active{ transform: translateY(3px); box-shadow: 0 3px 0 rgba(75,46,111,0.3), 0 4px 10px var(--shadow); }
+
+  @media (max-width:600px){
+    .gallery-btn{ top:12px; left:12px; font-size:12px; padding:8px 14px; }
+  }
+
+  /* ---- Gallery modal ---- */
+  .gallery-overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(75, 46, 111, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 80;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 30px 16px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .3s ease;
+  }
+  .gallery-overlay.open{ opacity:1; pointer-events:auto; }
+
+  .gallery-panel{
+    background: var(--white);
+    border-radius: 28px;
+    max-width: 780px;
+    width:100%;
+    max-height: 85vh;
+    overflow-y:auto;
+    padding: 28px;
+    position:relative;
+    box-shadow: 0 20px 50px rgba(75,46,111,0.4);
+    transform: scale(0.85) translateY(20px);
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .gallery-overlay.open .gallery-panel{ transform: scale(1) translateY(0); }
+
+  .gallery-panel h2{
+    font-family:'Baloo 2', cursive;
+    color: var(--plum);
+    margin: 0 0 6px;
+    font-size: 1.6rem;
+    text-align:center;
+  }
+  .gallery-panel p.sub{
+    text-align:center;
+    color: var(--plum);
+    opacity:.7;
+    font-weight:600;
+    margin: 0 0 20px;
+    font-size: .95rem;
+  }
+
+  .gallery-close{
+    position:absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius:50%;
+    border:none;
+    background: var(--pink);
+    color:#fff;
+    font-size: 18px;
+    font-weight:700;
+    cursor:pointer;
+    line-height:1;
+    box-shadow: 0 3px 0 rgba(75,46,111,0.3);
+  }
+  .gallery-close:hover{ filter: brightness(1.08); }
+
+  .gallery-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  .gallery-item{
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+    overflow:hidden;
+    cursor:pointer;
+    background: linear-gradient(135deg, #FFF3D9, #FFE0EE);
+    border: 3px solid #fff;
+    box-shadow: 0 6px 14px var(--shadow);
+    opacity:0;
+    transform: scale(0.6) rotate(-6deg);
+    animation: photo-pop .5s cubic-bezier(.34,1.56,.64,1) forwards;
+    transition: transform .2s ease;
+  }
+  .gallery-item:hover{ transform: scale(1.05) rotate(1deg) !important; }
+  .gallery-item img{
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    display:block;
+  }
+  @keyframes photo-pop{
+    to{ opacity:1; transform: scale(1) rotate(0deg); }
+  }
+
+  .gallery-empty{
+    grid-column: 1 / -1;
+    text-align:center;
+    color: var(--plum);
+    opacity:.75;
+    font-weight:600;
+    padding: 30px 10px;
+    line-height:1.6;
+  }
+  .gallery-empty code{
+    background: #f2ecff;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: .9em;
+  }
+
+  /* lightbox */
+  .lightbox{
+    position:fixed;
+    inset:0;
+    background: rgba(20, 10, 35, 0.85);
+    z-index: 90;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .25s ease;
+  }
+  .lightbox.open{ opacity:1; pointer-events:auto; }
+  .lightbox img{
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    transform: scale(0.85);
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .lightbox.open img{ transform: scale(1); }
+  .lightbox-close{
+    position:absolute;
+    top: 26px;
+    right: 26px;
+    width: 40px;
+    height: 40px;
+    border-radius:50%;
+    border:none;
+    background: var(--pink);
+    color:#fff;
+    font-size: 20px;
+    font-weight:700;
+    cursor:pointer;
+  }
 </style>
 </head>
 <body>
 
 <div class="stage" id="stage">
   <div class="ground"></div>
+
+  <button class="party-btn" id="partyBtn" type="button">🎉 Vui hơn nữa!</button>
+  <button class="gallery-btn" id="galleryBtn" type="button">📸 Ảnh của tôi</button>
 
   <!-- Floating doodles (inline SVG, no external images) -->
   <svg class="doodle d1" viewBox="0 0 64 64"><path d="M32 4 L39 24 L60 24 L43 37 L49 58 L32 45 L15 58 L21 37 L4 24 L25 24 Z" fill="var(--yellow)"/></svg>
@@ -266,6 +557,22 @@
   <div class="made">made with 🎉 just for fun</div>
 </div>
 
+<!-- Gallery modal -->
+<div class="gallery-overlay" id="galleryOverlay">
+  <div class="gallery-panel">
+    <button class="gallery-close" id="galleryClose" type="button" aria-label="Đóng">✕</button>
+    <h2>📸 Khoảnh khắc của Quốc Anh</h2>
+    <p class="sub">Click vào ảnh để xem to hơn nha!</p>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Đóng">✕</button>
+  <img id="lightboxImg" src="" alt="Ảnh phóng to">
+</div>
+
 <script>
   const colors = ['#FF6FA0', '#FFC93C', '#38C7B6', '#B79CED', '#FFFDF8'];
 
@@ -292,8 +599,32 @@
     burst(rect.left + rect.width/2, rect.top + rect.height/2, count);
   }
 
+  function shakeScreen(){
+    document.body.classList.remove('shake');
+    void document.body.offsetWidth; // restart animation
+    document.body.classList.add('shake');
+    setTimeout(()=> document.body.classList.remove('shake'), 400);
+  }
+
+  const comboMessages = [
+    'Yeah! 🙌', 'Hay quá! ✨', 'Nice! 🔥', 'Zui zui! 🥳',
+    'Cực đỉnh! 🚀', 'Bùng nổ! 💥', 'Quá xịn! 😎', 'Xuất sắc! 🌟'
+  ];
+  let clickCombo = 0;
+  function showCombo(x, y){
+    const msg = document.createElement('div');
+    msg.className = 'combo-msg';
+    clickCombo++;
+    const text = clickCombo > 6 ? `Combo x${clickCombo}! 🔥🔥` : comboMessages[Math.floor(Math.random()*comboMessages.length)];
+    msg.textContent = text;
+    document.body.appendChild(msg);
+    setTimeout(()=> msg.remove(), 1000);
+  }
+
   document.getElementById('nameHeading').addEventListener('click', (e)=>{
     burst(e.clientX, e.clientY, 26);
+    shakeScreen();
+    showCombo(e.clientX, e.clientY);
   });
 
   document.querySelectorAll('.doodle').forEach(d=>{
@@ -301,6 +632,147 @@
       e.stopPropagation();
       burstAt(d, 14);
     });
+  });
+
+  // ---- Sparkle cursor trail ----
+  const sparkleColors = ['#FF6FA0', '#FFC93C', '#38C7B6', '#B79CED'];
+  let lastSparkle = 0;
+  window.addEventListener('mousemove', (e)=>{
+    const now = Date.now();
+    if(now - lastSparkle < 40) return; // throttle
+    lastSparkle = now;
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = (e.clientX - 4) + 'px';
+    s.style.top = (e.clientY - 4) + 'px';
+    s.style.background = sparkleColors[Math.floor(Math.random()*sparkleColors.length)];
+    document.body.appendChild(s);
+    setTimeout(()=> s.remove(), 620);
+  });
+
+  // ---- Party mode ----
+  const partyBtn = document.getElementById('partyBtn');
+  const partyEmojis = ['🎈','✨','🎉','🌟','🍭','🦄','🎊','💫'];
+  let partyOn = false;
+  let partyInterval = null;
+
+  function spawnEmojiRain(){
+    const e = document.createElement('div');
+    e.className = 'emoji-drop';
+    e.textContent = partyEmojis[Math.floor(Math.random()*partyEmojis.length)];
+    e.style.left = Math.random()*100 + 'vw';
+    const duration = 2.5 + Math.random()*2;
+    e.style.animationDuration = duration + 's';
+    e.style.fontSize = (18 + Math.random()*20) + 'px';
+    document.body.appendChild(e);
+    setTimeout(()=> e.remove(), duration*1000 + 100);
+  }
+
+  partyBtn.addEventListener('click', ()=>{
+    partyOn = !partyOn;
+    document.body.classList.toggle('party', partyOn);
+    partyBtn.classList.toggle('on', partyOn);
+    partyBtn.textContent = partyOn ? '🛑 Tắt bớt lại' : '🎉 Vui hơn nữa!';
+
+    document.querySelectorAll('.doodle').forEach(d=>{
+      d.style.animationDuration = partyOn ? '1.6s' : '';
+    });
+
+    if(partyOn){
+      burst(window.innerWidth/2, window.innerHeight/2, 40);
+      partyInterval = setInterval(spawnEmojiRain, 180);
+    } else if(partyInterval){
+      clearInterval(partyInterval);
+      partyInterval = null;
+    }
+  });
+
+  // ---- Gallery ----
+  // Đặt ảnh của bạn vào thư mục "photos/" cạnh file index.html,
+  // đặt tên theo mẫu bên dưới (hoặc sửa mảng này cho khớp tên file bạn dùng).
+  const photoFiles = [
+    'photos/1.png', //'photos/2.png', 'photos/3.png',
+    //'photos/4.png', 'photos/5.png', 'photos/6.png'
+  ];
+
+  const galleryBtn = document.getElementById('galleryBtn');
+  const galleryOverlay = document.getElementById('galleryOverlay');
+  const galleryGrid = document.getElementById('galleryGrid');
+  const galleryClose = document.getElementById('galleryClose');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  let galleryBuilt = false;
+  let loadedCount = 0;
+
+  function buildGallery(){
+    if(galleryBuilt) return;
+    galleryBuilt = true;
+
+    photoFiles.forEach((src, i)=>{
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.style.animationDelay = (i * 0.07) + 's';
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'Ảnh của Lã Quốc Anh';
+      img.loading = 'lazy';
+
+      img.addEventListener('error', ()=>{
+        item.remove();
+        checkEmpty();
+      });
+      img.addEventListener('load', ()=>{ loadedCount++; });
+
+      item.appendChild(img);
+      item.addEventListener('click', ()=> openLightbox(src));
+      galleryGrid.appendChild(item);
+    });
+
+    // check after a moment whether any photos actually loaded
+    setTimeout(checkEmpty, 700);
+  }
+
+  function checkEmpty(){
+    if(galleryGrid.children.length === 0 || loadedCount === 0){
+      if(!galleryGrid.querySelector('.gallery-empty')){
+        const empty = document.createElement('div');
+        empty.className = 'gallery-empty';
+        empty.innerHTML = `Chưa có ảnh nào ở đây 🖼️<br>
+          Bỏ ảnh của bạn vào thư mục <code>photos/</code> cạnh <code>index.html</code>,
+          đặt tên <code>1.png</code>, <code>2.png</code>... rồi push lên GitHub nhé!`;
+        galleryGrid.appendChild(empty);
+      }
+    }
+  }
+
+  function openGallery(){
+    buildGallery();
+    galleryOverlay.classList.add('open');
+  }
+  function closeGallery(){ galleryOverlay.classList.remove('open'); }
+
+  function openLightbox(src){
+    lightboxImg.src = src;
+    lightbox.classList.add('open');
+  }
+  function closeLightbox(){ lightbox.classList.remove('open'); }
+
+  galleryBtn.addEventListener('click', openGallery);
+  galleryClose.addEventListener('click', closeGallery);
+  galleryOverlay.addEventListener('click', (e)=>{
+    if(e.target === galleryOverlay) closeGallery();
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e)=>{
+    if(e.target === lightbox) closeLightbox();
+  });
+
+  window.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){ closeLightbox(); closeGallery(); }
   });
 
   // gentle parallax with mouse/touch
