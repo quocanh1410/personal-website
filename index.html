@@ -623,6 +623,81 @@
     .music-btn{ bottom:12px; left:12px; font-size:12px; padding:8px 14px; }
   }
 
+  /* ---- Letter button ---- */
+  .letter-btn{
+    position:absolute;
+    top: 78px;
+    left:50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size: 14px;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--pink), #FF8FB8);
+    border: none;
+    padding: 11px 22px;
+    border-radius: 999px;
+    cursor:pointer;
+    white-space: nowrap;
+    box-shadow: 0 6px 0 rgba(75,46,111,0.3), 0 8px 18px var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease;
+    opacity:0;
+    animation: fade-up .7s ease 1.9s forwards, letter-glow 2.4s ease-in-out 3s infinite;
+  }
+  .letter-btn:hover{ transform: translateX(-50%) translateY(-2px) scale(1.05); }
+  .letter-btn:active{ transform: translateX(-50%) translateY(3px); box-shadow: 0 3px 0 rgba(75,46,111,0.3), 0 4px 10px var(--shadow); }
+  @keyframes letter-glow{
+    0%, 100%{ box-shadow: 0 6px 0 rgba(75,46,111,0.3), 0 8px 18px var(--shadow); }
+    50%{ box-shadow: 0 6px 0 rgba(75,46,111,0.3), 0 8px 26px rgba(255,111,160,0.55); }
+  }
+
+  @media (max-width:600px){
+    .letter-btn{ top:60px; font-size:11px; padding:8px 14px; }
+  }
+
+  /* ---- Letter modal ---- */
+  .letter-panel{
+    max-width: 620px;
+    background: linear-gradient(180deg, #FFFDF8, #FFF6E8);
+    position:relative;
+  }
+  .letter-panel::before{
+    content:'';
+    position:absolute;
+    top:0; left:0; right:0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--pink), var(--yellow), var(--teal), var(--lilac));
+    border-radius: 28px 28px 0 0;
+  }
+  .letter-heading{
+    text-align:center;
+    margin: 4px 0 20px;
+  }
+  .letter-heading .stamp{
+    font-size: 2rem;
+    display:block;
+    margin-bottom: 6px;
+  }
+  .letter-heading h2{
+    font-family:'Baloo 2', cursive;
+    color: var(--plum);
+    margin:0;
+    font-size: 1.4rem;
+  }
+  .letter-body{
+    font-family: 'Quicksand', sans-serif;
+    color: var(--plum);
+    font-size: 1.02rem;
+    line-height: 1.9;
+    white-space: pre-line;
+    opacity:0;
+    animation: fade-up .8s ease .2s forwards;
+  }
+  .letter-body p{
+    margin: 0 0 16px;
+  }
+
   /* ---- Music panel (Spotify embed) ---- */
   .music-panel{
     position:absolute;
@@ -660,6 +735,7 @@
 <div class="stage" id="stage">
   <div class="ground"></div>
 
+  <button class="letter-btn" id="letterBtn" type="button">💌 Thư cho em</button>
   <button class="party-btn" id="partyBtn" type="button">🎉 Vui hơn nữa!</button>
   <button class="gallery-btn" id="galleryBtn" type="button">📸 Ảnh của tôi</button>
   <button class="about-btn" id="aboutBtn" type="button">💭 Về mình</button>
@@ -717,6 +793,23 @@
   </div>
 </div>
 
+<!-- Letter modal -->
+<div class="gallery-overlay" id="letterOverlay">
+  <div class="gallery-panel letter-panel">
+    <button class="gallery-close" id="letterClose" type="button" aria-label="Đóng">✕</button>
+    <div class="letter-heading">
+      <span class="stamp">💌</span>
+      <h2>Gửi Quỳnh</h2>
+    </div>
+    <div class="letter-body">
+      <p>Anh biết em là người hay nghĩ nhiều. Nghĩ về những điều đã qua, nghĩ về những điều chưa tới, đôi khi chỉ một câu nói bâng quơ cũng đủ làm em trằn trọc cả đêm. Anh không viết lá thư này để bảo em đừng nghĩ nữa, vì đó vốn là một phần rất thật của em, và anh không muốn em phải thay đổi điều gì để bước vào mối quan hệ này cả.</p>
+      <p>Anh cũng không giấu em, trước đây anh từng có những mối quan hệ không đi đến đâu, có những lúc anh cũng hời hợt, cũng vội vàng, cũng làm người khác buồn. Anh sẽ không nói những chuyện đó không tồn tại, vì nó là một phần của quá khứ anh. Nhưng anh muốn em hiểu một điều: anh không mang quá khứ đó tới đây để lặp lại nó với em. Anh mang nó tới để nhắc chính mình rằng, lần này, anh biết mình đang chọn ai và vì sao.</p>
+      <p>Em không cần phải hoàn hảo, không cần phải luôn vui vẻ, không cần phải giấu đi những lúc yếu lòng hay hờn dỗi vu vơ. Anh không tìm một người lúc nào cũng ổn. Anh muốn ở cạnh con người thật của em, kể cả những ngày em không ổn. Nếu em buồn, anh muốn là người em không ngại nói ra. Nếu em nghĩ nhiều, anh muốn là người ngồi nghĩ cùng em, chứ không phải người khiến em phải nghĩ nhiều hơn.</p>
+      <p>Anh không hứa mọi thứ sẽ luôn dễ dàng, vì tình yêu nào cũng có lúc khó khăn. Nhưng anh hứa sẽ không rời đi chỉ vì khó. Anh muốn cùng em đi chậm, đi chắc, để mỗi bước em bước tới anh đều là một bước em thật sự yên tâm, chứ không phải một bước liều lĩnh.</p>
+    </div>
+  </div>
+</div>
+
 <!-- About modal -->
 <div class="gallery-overlay" id="aboutOverlay">
   <div class="gallery-panel about-panel">
@@ -741,7 +834,7 @@
       </div>
       <div class="about-card" style="animation-delay:.23s">
         <span class="icon">🖼️</span>
-        <span class="text"><b>Mê tranh Nhật cổ</b>Có thể ngồi cả buổi ngắm và đọc về, mê cái đẹp cổ điển mà tinh tế.</span>
+        <span class="text"><b>Mê tranh Nhật cổ</b>Có thể ngồi cả buổi ngắm và đọc về những bức tranh cổ, mê cái đẹp cổ điển mà tinh tế.</span>
       </div>
       <div class="about-card" style="animation-delay:.30s">
         <span class="icon">🎮</span>
@@ -996,8 +1089,25 @@
     if(e.target === aboutOverlay) closeAbout();
   });
 
+  // ---- Letter modal ----
+  const letterBtn = document.getElementById('letterBtn');
+  const letterOverlay = document.getElementById('letterOverlay');
+  const letterClose = document.getElementById('letterClose');
+
+  function openLetter(){
+    letterOverlay.classList.add('open');
+    burst(window.innerWidth/2, window.innerHeight*0.3, 16);
+  }
+  function closeLetter(){ letterOverlay.classList.remove('open'); }
+
+  letterBtn.addEventListener('click', openLetter);
+  letterClose.addEventListener('click', closeLetter);
+  letterOverlay.addEventListener('click', (e)=>{
+    if(e.target === letterOverlay) closeLetter();
+  });
+
   window.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape'){ closeLightbox(); closeGallery(); closeAbout(); }
+    if(e.key === 'Escape'){ closeLightbox(); closeGallery(); closeAbout(); closeLetter(); }
   });
 
   // gentle parallax with mouse/touch
