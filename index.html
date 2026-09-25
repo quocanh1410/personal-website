@@ -592,6 +592,67 @@
     margin-bottom: 2px;
   }
 
+  /* ---- Music button ---- */
+  .music-btn{
+    position:absolute;
+    bottom: 22px;
+    left: 22px;
+    z-index: 20;
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size: 14px;
+    color: var(--plum);
+    background: var(--teal);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor:pointer;
+    box-shadow: 0 6px 0 rgba(75,46,111,0.3), 0 8px 16px var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease;
+    opacity:0;
+    animation: fade-up .7s ease 2s forwards;
+    display:inline-flex;
+    align-items:center;
+    gap: 2px;
+  }
+  .music-btn:hover{ transform: translateY(-2px) scale(1.05); }
+  .music-btn:active{ transform: translateY(3px); box-shadow: 0 3px 0 rgba(75,46,111,0.3), 0 4px 10px var(--shadow); }
+  .music-btn.on{ background: var(--pink); color: var(--white); }
+
+  @media (max-width:600px){
+    .music-btn{ bottom:12px; left:12px; font-size:12px; padding:8px 14px; }
+  }
+
+  /* ---- Music panel (Spotify embed) ---- */
+  .music-panel{
+    position:absolute;
+    bottom: 74px;
+    left: 22px;
+    z-index: 21;
+    width: min(340px, calc(100vw - 44px));
+    background: var(--white);
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: 0 14px 30px var(--shadow);
+    opacity:0;
+    transform: scale(0.9) translateY(10px);
+    pointer-events:none;
+    transition: opacity .25s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .music-panel.open{
+    opacity:1;
+    transform: scale(1) translateY(0);
+    pointer-events:auto;
+  }
+  .music-panel iframe{
+    display:block;
+    border-radius: 12px;
+    width:100%;
+  }
+
+  @media (max-width:600px){
+    .music-panel{ bottom:60px; left:12px; }
+  }
 </style>
 </head>
 <body>
@@ -602,6 +663,15 @@
   <button class="party-btn" id="partyBtn" type="button">🎉 Vui hơn nữa!</button>
   <button class="gallery-btn" id="galleryBtn" type="button">📸 Ảnh của tôi</button>
   <button class="about-btn" id="aboutBtn" type="button">💭 Về mình</button>
+  <button class="music-btn" id="musicBtn" type="button">🎵 Nghe nhạc nền</button>
+  <div class="music-panel" id="musicPanel">
+    <!-- "Thế Giới Của Anh" - nhúng chính thức từ YouTube -->
+    <iframe id="spotifyFrame" data-src="https://www.youtube.com/embed/E27ET_lINRo?rel=0"
+      width="100%" height="180" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      loading="lazy"></iframe>
+  </div>
 
   <!-- Floating doodles (inline SVG, no external images) -->
   <svg class="doodle d1" viewBox="0 0 64 64"><path d="M32 4 L39 24 L60 24 L43 37 L49 58 L32 45 L15 58 L21 37 L4 24 L25 24 Z" fill="var(--yellow)"/></svg>
@@ -671,7 +741,7 @@
       </div>
       <div class="about-card" style="animation-delay:.23s">
         <span class="icon">🖼️</span>
-        <span class="text"><b>Mê tranh Nhật cổ</b>Có thể ngồi cả buổi ngắm và đọc về tranh, mê cái đẹp cổ điển mà tinh tế.</span>
+        <span class="text"><b>Mê tranh Nhật cổ</b>Có thể ngồi cả buổi ngắm và đọc về, mê cái đẹp cổ điển mà tinh tế.</span>
       </div>
       <div class="about-card" style="animation-delay:.30s">
         <span class="icon">🎮</span>
@@ -892,6 +962,25 @@
   lightbox.addEventListener('click', (e)=>{
     if(e.target === lightbox) closeLightbox();
   });
+
+  // ---- Nhạc nền: nhúng Spotify chính thức, khách tự bấm play ----
+  const musicBtn = document.getElementById('musicBtn');
+  const musicPanel = document.getElementById('musicPanel');
+  const spotifyFrame = document.getElementById('spotifyFrame');
+  let musicPanelOpen = false;
+
+  function toggleMusicPanel(){
+    musicPanelOpen = !musicPanelOpen;
+    if(musicPanelOpen && !spotifyFrame.src){
+      spotifyFrame.src = spotifyFrame.dataset.src; // chỉ tải khi mở lần đầu
+    }
+    musicPanel.classList.toggle('open', musicPanelOpen);
+    musicBtn.classList.toggle('on', musicPanelOpen);
+    musicBtn.textContent = musicPanelOpen ? '🎵 Đóng nhạc' : '🎵 Nghe nhạc nền';
+  }
+
+  musicBtn.addEventListener('click', toggleMusicPanel);
+
 
   // ---- About modal ----
   const aboutBtn = document.getElementById('aboutBtn');
