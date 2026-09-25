@@ -514,8 +514,8 @@
     cursor:pointer;
   }
 
-  /* ---- Music button ---- */
-  .music-btn{
+  /* ---- About button ---- */
+  .about-btn{
     position:absolute;
     bottom: 22px;
     right: 22px;
@@ -534,29 +534,64 @@
     opacity:0;
     animation: fade-up .7s ease 1.8s forwards;
   }
-  .music-btn:hover{ transform: translateY(-2px) scale(1.05); }
-  .music-btn:active{ transform: translateY(3px); box-shadow: 0 3px 0 rgba(75,46,111,0.3), 0 4px 10px var(--shadow); }
-  .music-btn.on{ background: var(--teal); color: var(--white); }
-  .music-btn .eq{
-    display:inline-block;
-    width: 3px;
-    height: 10px;
-    margin-left: 1px;
-    background: currentColor;
-    border-radius: 2px;
-    vertical-align: middle;
-  }
-  .music-btn.on .eq{ animation: eq-bounce .7s ease-in-out infinite; }
-  .music-btn.on .eq:nth-child(2){ animation-delay: .15s; }
-  .music-btn.on .eq:nth-child(3){ animation-delay: .3s; }
-  @keyframes eq-bounce{
-    0%, 100%{ transform: scaleY(0.4); }
-    50%{ transform: scaleY(1); }
-  }
+  .about-btn:hover{ transform: translateY(-2px) scale(1.05); }
+  .about-btn:active{ transform: translateY(3px); box-shadow: 0 3px 0 rgba(75,46,111,0.3), 0 4px 10px var(--shadow); }
 
   @media (max-width:600px){
-    .music-btn{ bottom:12px; right:12px; font-size:12px; padding:8px 14px; }
+    .about-btn{ bottom:12px; right:12px; font-size:12px; padding:8px 14px; }
   }
+
+  /* ---- About modal ---- */
+  .about-panel .about-intro{
+    text-align:center;
+    color: var(--plum);
+    font-weight:600;
+    font-size: 1rem;
+    line-height:1.65;
+    margin: 0 0 22px;
+    opacity:.9;
+  }
+
+  .about-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+  }
+
+  .about-card{
+    display:flex;
+    align-items:flex-start;
+    gap: 12px;
+    background: linear-gradient(135deg, #FFF3D9, #FFE0EE);
+    border: 3px solid #fff;
+    border-radius: 18px;
+    padding: 14px 16px;
+    box-shadow: 0 6px 14px var(--shadow);
+    opacity:0;
+    transform: scale(0.6) rotate(-6deg);
+    animation: photo-pop .5s cubic-bezier(.34,1.56,.64,1) forwards;
+    transition: transform .2s ease;
+  }
+  .about-card:hover{ transform: scale(1.03) rotate(1deg) !important; }
+  .about-card .icon{
+    font-size: 1.6rem;
+    line-height:1;
+    flex-shrink:0;
+  }
+  .about-card .text{
+    color: var(--plum);
+    font-weight:600;
+    font-size: .92rem;
+    line-height:1.4;
+  }
+  .about-card .text b{
+    display:block;
+    font-family:'Baloo 2', cursive;
+    font-weight:700;
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+
 </style>
 </head>
 <body>
@@ -566,7 +601,7 @@
 
   <button class="party-btn" id="partyBtn" type="button">🎉 Vui hơn nữa!</button>
   <button class="gallery-btn" id="galleryBtn" type="button">📸 Ảnh của tôi</button>
-  <button class="music-btn" id="musicBtn" type="button">🎵 Bật nhạc</button>
+  <button class="about-btn" id="aboutBtn" type="button">💭 Về mình</button>
 
   <!-- Floating doodles (inline SVG, no external images) -->
   <svg class="doodle d1" viewBox="0 0 64 64"><path d="M32 4 L39 24 L60 24 L43 37 L49 58 L32 45 L15 58 L21 37 L4 24 L25 24 Z" fill="var(--yellow)"/></svg>
@@ -609,6 +644,48 @@
     <h2>📸 Khoảnh khắc của Như Quỳnh</h2>
     <p class="sub">Click vào ảnh để xem to hơn nha!</p>
     <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</div>
+
+<!-- About modal -->
+<div class="gallery-overlay" id="aboutOverlay">
+  <div class="gallery-panel about-panel">
+    <button class="gallery-close" id="aboutClose" type="button" aria-label="Đóng">✕</button>
+    <h2>💭 Một chút về mình</h2>
+    <p class="about-intro">
+      Mình là kiểu người sống trong đầu nhiều hơn ngoài đời thật —
+      hay mơ mộng, hay tưởng tượng, và luôn tìm cái đẹp trong những điều nhỏ xíu. Đây là vài mảnh ghép của mình:
+    </p>
+    <div class="about-grid">
+      <div class="about-card" style="animation-delay:.02s">
+        <span class="icon">🎨</span>
+        <span class="text"><b>Vẽ tranh</b>Thích cầm cọ hơn cầm gì khác, vẽ là cách mình "nói chuyện" với chính mình.</span>
+      </div>
+      <div class="about-card" style="animation-delay:.09s">
+        <span class="icon">🎻</span>
+        <span class="text"><b>Ước học violin</b>Chưa được học chính thức, nhưng luôn mơ một ngày được kéo những nốt nhạc đầu tiên.</span>
+      </div>
+      <div class="about-card" style="animation-delay:.16s">
+        <span class="icon">🌙</span>
+        <span class="text"><b>Tâm hồn mộng mơ</b>Hay lơ đãng nghĩ vẩn vơ, sống nửa ở thực tại, nửa ở đâu đó rất xa.</span>
+      </div>
+      <div class="about-card" style="animation-delay:.23s">
+        <span class="icon">🖼️</span>
+        <span class="text"><b>Mê tranh Nhật cổ</b>Có thể ngồi cả buổi ngắm và đọc về ukiyo-e, mê cái đẹp cổ điển mà tinh tế.</span>
+      </div>
+      <div class="about-card" style="animation-delay:.30s">
+        <span class="icon">🎮</span>
+        <span class="text"><b>Ghiền game</b>Lúc rảnh là dán mắt vào màn hình, game là cách mình "xả" hiệu quả nhất.</span>
+      </div>
+      <div class="about-card" style="animation-delay:.37s">
+        <span class="icon">👗</span>
+        <span class="text"><b>Yêu màu mè</b>Tủ đồ của mình không có chỗ cho sự nhàm chán, càng rực rỡ càng thích.</span>
+      </div>
+      <div class="about-card" style="animation-delay:.44s">
+        <span class="icon">🥺</span>
+        <span class="text"><b>Đôi lúc yếu lòng</b>Hay nghĩ nhiều, dễ chạnh lòng, thỉnh thoảng hờn dỗi vu vơ — nhưng đó cũng là mình.</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -732,174 +809,12 @@
     }
   });
 
-  // ---- Nhạc nền: tự sinh bằng Web Audio API (không dùng file mp3) ----
-  // Một vòng lặp 4 ô nhịp: đệm hợp âm + bass + giai điệu pentatonic + trống.
-  // Trình duyệt chặn tự phát tiếng, nên nhạc chỉ chạy sau khi bấm nút.
-  const musicBtn = document.getElementById('musicBtn');
-  const EQ_BARS = '<span class="eq"></span><span class="eq"></span><span class="eq"></span>';
-  function setMusicLabel(){
-    musicBtn.innerHTML = (musicOn ? '🎶 Tắt nhạc ' : '🎵 Bật nhạc ') + EQ_BARS;
-  }
-
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  const BPM = 108;
-
-  // tên nốt -> số nửa cung tính từ A4, rồi ra tần số
-  const SEMI = {
-    C3:-21, D3:-19, E3:-17, F3:-16, G3:-14, A3:-12, B3:-10,
-    C4:-9, D4:-7, E4:-5, F4:-4, G4:-2, A4:0, B4:2,
-    C5:3, D5:5, E5:7, G5:10
-  };
-  const hz = n => 440 * Math.pow(2, SEMI[n] / 12);
-
-  // vòng hợp âm: C - G - Am - F (mỗi hợp âm 1 ô nhịp = 8 bước)
-  const CHORDS = [
-    ['C4','E4','G4'],
-    ['G3','B3','D4'],
-    ['A3','C4','E4'],
-    ['F3','A3','C4']
-  ];
-  // giai điệu 32 bước (nốt móc đơn), null = nghỉ
-  const MELODY = [
-    'C5', null, 'E5', 'G5', null, 'E5', 'D5', null,
-    'G4', null, 'C5', 'D5', null, 'E5', null, null,
-    'E5', 'D5', 'C5', null, 'A4', null, 'C5', null,
-    'D5', null, 'G4', 'A4', null, 'C5', null, null
-  ];
-
-  let audioCtx = null;
-  let master = null;
-  let musicOn = false;
-  let schedulerTimer = null;
-  let stepIndex = 0;
-  let nextStepTime = 0;
-  setMusicLabel();
-
-  function stepSeconds(){
-    // 1 bước = nốt móc đơn = nửa phách; party mode thì nhanh hơn
-    return (60 / (BPM * (partyOn ? 1.35 : 1))) / 2;
-  }
-
-  function tone(freq, start, dur, type, vol){
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.linearRampToValueAtTime(vol, start + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-    osc.connect(gain).connect(master);
-    osc.start(start);
-    osc.stop(start + dur + 0.05);
-  }
-
-  function kick(start){
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.frequency.setValueAtTime(140, start);
-    osc.frequency.exponentialRampToValueAtTime(45, start + 0.12);
-    gain.gain.setValueAtTime(0.6, start);
-    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18);
-    osc.connect(gain).connect(master);
-    osc.start(start);
-    osc.stop(start + 0.2);
-  }
-
-  function hat(start){
-    const len = Math.floor(audioCtx.sampleRate * 0.05);
-    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-    const data = buf.getChannelData(0);
-    for(let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    const hp = audioCtx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 7000;
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.22, start);
-    gain.gain.exponentialRampToValueAtTime(0.001, start + 0.04);
-    src.connect(hp).connect(gain).connect(master);
-    src.start(start);
-    src.stop(start + 0.05);
-  }
-
-  function scheduleStep(s, t){
-    const bar = Math.floor(s / 8) % CHORDS.length;
-    const chord = CHORDS[bar];
-    const inBar = s % 8;
-
-    // đệm hợp âm ngân dài ở đầu mỗi ô nhịp
-    if(inBar === 0){
-      const hold = stepSeconds() * 7;
-      chord.forEach(n => tone(hz(n), t, hold, 'sine', 0.05));
-    }
-    // bass nốt gốc mỗi phách
-    if(inBar % 2 === 0){
-      tone(hz(chord[0]) / 2, t, 0.32, 'square', 0.08);
-    }
-    // giai điệu
-    const m = MELODY[s % MELODY.length];
-    if(m){
-      tone(hz(m), t, 0.28, 'triangle', 0.13);
-      if(partyOn) tone(hz(m) * 1.5, t, 0.2, 'triangle', 0.04);
-    }
-    // trống
-    if(inBar % 4 === 0) kick(t);
-    if(inBar % 2 === 1) hat(t);
-  }
-
-  function scheduler(){
-    while(nextStepTime < audioCtx.currentTime + 0.1){
-      scheduleStep(stepIndex, nextStepTime);
-      nextStepTime += stepSeconds();
-      stepIndex = (stepIndex + 1) % 32;
-    }
-    schedulerTimer = setTimeout(scheduler, 25);
-  }
-
-  function startMusic(){
-    if(!AudioCtx) return;
-    if(!audioCtx){
-      audioCtx = new AudioCtx();
-      master = audioCtx.createGain();
-      master.gain.value = 0.0001;
-      const comp = audioCtx.createDynamicsCompressor();
-      comp.threshold.value = -12;
-      comp.ratio.value = 12;
-      master.connect(comp).connect(audioCtx.destination);
-    }
-    audioCtx.resume();
-    musicOn = true;
-    stepIndex = 0;
-    nextStepTime = audioCtx.currentTime + 0.08;
-    master.gain.cancelScheduledValues(audioCtx.currentTime);
-    master.gain.setTargetAtTime(0.22, audioCtx.currentTime, 0.25);
-    scheduler();
-    musicBtn.classList.add('on');
-    setMusicLabel();
-  }
-
-  function stopMusic(){
-    musicOn = false;
-    if(schedulerTimer){ clearTimeout(schedulerTimer); schedulerTimer = null; }
-    if(master){
-      master.gain.cancelScheduledValues(audioCtx.currentTime);
-      master.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.2);
-    }
-    musicBtn.classList.remove('on');
-    setMusicLabel();
-  }
-
-  musicBtn.addEventListener('click', ()=>{
-    musicOn ? stopMusic() : startMusic();
-  });
-
   // ---- Gallery ----
   // Đặt ảnh của bạn vào thư mục "photos/" cạnh file index.html,
   // đặt tên theo mẫu bên dưới (hoặc sửa mảng này cho khớp tên file bạn dùng).
   const photoFiles = [
-    'photos/1.png', //'photos/2.png', 'photos/3.png',
-    //'photos/4.png', 'photos/5.png', 'photos/6.png'
+    'photos/1.png', 'photos/2.png', 'photos/3.png',
+    'photos/4.png', 'photos/5.png', 'photos/6.png'
   ];
 
   const galleryBtn = document.getElementById('galleryBtn');
@@ -978,8 +893,22 @@
     if(e.target === lightbox) closeLightbox();
   });
 
+  // ---- About modal ----
+  const aboutBtn = document.getElementById('aboutBtn');
+  const aboutOverlay = document.getElementById('aboutOverlay');
+  const aboutClose = document.getElementById('aboutClose');
+
+  function openAbout(){ aboutOverlay.classList.add('open'); }
+  function closeAbout(){ aboutOverlay.classList.remove('open'); }
+
+  aboutBtn.addEventListener('click', openAbout);
+  aboutClose.addEventListener('click', closeAbout);
+  aboutOverlay.addEventListener('click', (e)=>{
+    if(e.target === aboutOverlay) closeAbout();
+  });
+
   window.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape'){ closeLightbox(); closeGallery(); }
+    if(e.key === 'Escape'){ closeLightbox(); closeGallery(); closeAbout(); }
   });
 
   // gentle parallax with mouse/touch
